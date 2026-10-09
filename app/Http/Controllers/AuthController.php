@@ -13,7 +13,12 @@ class AuthController extends Controller
 {
     public function login(): View
     {
-        return view('auth.login');
+        return view('auth.login', ['writerLogin' => false]);
+    }
+
+    public function writerLogin(): View
+    {
+        return view('auth.login', ['writerLogin' => true]);
     }
 
     public function register(): View
@@ -30,6 +35,10 @@ class AuthController extends Controller
         }
 
         $request->session()->regenerate();
+
+        if ($request->user()->is_writer) {
+            return redirect()->route('dashboard.writings.index');
+        }
 
         return redirect()->intended(route('dashboard.index'));
     }

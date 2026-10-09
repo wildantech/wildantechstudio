@@ -9,11 +9,18 @@ use App\Http\Controllers\InvitationGuestController;
 use App\Http\Controllers\InvitationWishController;
 use App\Http\Controllers\PublicInvitationController;
 use App\Http\Controllers\StudioController;
+use App\Http\Controllers\WritingAuthorController;
+use App\Http\Controllers\WritingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [StudioController::class, 'index'])->name('home');
 Route::get('/undangan-digital', [StudioController::class, 'invitations'])->name('studio.invitations');
 Route::get('/karya/{project:slug}', [StudioController::class, 'project'])->name('projects.show');
+Route::get('/ruang-baca', [WritingController::class, 'index'])->name('readings.index');
+Route::get('/ruang-baca/daftar-penulis', [WritingAuthorController::class, 'create'])->name('writers.register');
+Route::post('/ruang-baca/daftar-penulis', [WritingAuthorController::class, 'store'])->middleware('throttle:3,1')->name('writers.register.store');
+Route::get('/ruang-baca/masuk', [AuthController::class, 'writerLogin'])->middleware('guest')->name('writers.login');
+Route::get('/ruang-baca/{writing:slug}', [WritingController::class, 'show'])->name('readings.show');
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/masuk', [AuthController::class, 'login'])->name('login');
@@ -29,6 +36,12 @@ Route::post('/i/{invitation:slug}/{token}/ucapan', [InvitationWishController::cl
 Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(function (): void {
     Route::get('/', [DashboardController::class, 'index'])->name('index');
     Route::post('/keluar', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/ruang-tulis', [WritingController::class, 'dashboardIndex'])->name('writings.index');
+    Route::get('/ruang-tulis/buat', [WritingController::class, 'create'])->name('writings.create');
+    Route::post('/ruang-tulis', [WritingController::class, 'store'])->name('writings.store');
+    Route::get('/ruang-tulis/{writing}/edit', [WritingController::class, 'edit'])->name('writings.edit');
+    Route::put('/ruang-tulis/{writing}', [WritingController::class, 'update'])->name('writings.update');
+    Route::delete('/ruang-tulis/{writing}', [WritingController::class, 'destroy'])->name('writings.destroy');
     Route::resource('invitations', InvitationController::class)->except(['index']);
     Route::post('/invitations/{invitation}/guests', [InvitationGuestController::class, 'store'])->name('guests.store');
     Route::put('/invitations/{invitation}/guests/{guest}', [InvitationGuestController::class, 'update'])->name('guests.update');

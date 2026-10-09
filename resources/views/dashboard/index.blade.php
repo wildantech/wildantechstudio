@@ -6,7 +6,14 @@
     <section class="container dashboard-shell">
         <div class="dashboard-head">
             <div><p class="eyebrow">Workspace</p><h1>Halo, {{ auth()->user()->name }}.</h1><p>Semua undangan dan pembaruan acara ada di sini.</p></div>
-            <a class="button" href="{{ route('dashboard.invitations.create') }}">Buat undangan</a>
+            <div class="dashboard-head-actions">
+                @if (auth()->user()->is_writer)
+                    <a class="button-quiet" href="{{ route('dashboard.writings.index') }}">Masuk ke Studio Tulisan</a>
+                @else
+                    <a class="button-quiet" href="{{ route('writers.register') }}">Buka Ruang Tulis</a>
+                @endif
+                <a class="button" href="{{ route('dashboard.invitations.create') }}">Buat undangan</a>
+            </div>
         </div>
 
         @if (auth()->user()->is_admin)
