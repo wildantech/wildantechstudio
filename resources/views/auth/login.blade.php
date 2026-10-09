@@ -10,6 +10,10 @@
 @section('content')
     <section class="container auth-wrap">
         <div class="auth-panel">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+                <img src="{{ asset('images/logo.png') }}" alt="WildanTech" width="30" height="30" style="width:30px;height:30px;border-radius:50%;object-fit:contain;background:#ffffff;padding:2px;">
+                <span style="font-size:12px;font-weight:800;letter-spacing:0.06em;color:#ffffff;">WILDANTECH</span>
+            </div>
             <p class="eyebrow">{{ $writerLogin ? 'Ruang Baca · Area Penulis' : 'Area pelanggan' }}</p>
             <h1>{{ $writerLogin ? 'Lanjutkan ceritamu.' : 'Selamat datang kembali.' }}</h1>
             <p>{{ $writerLogin ? 'Masuk untuk mengelola draf dan menerbitkan tulisanmu.' : 'Masuk untuk mengelola undangan dan daftar tamumu.' }}</p>

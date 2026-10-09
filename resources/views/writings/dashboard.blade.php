@@ -5,7 +5,13 @@
 
 @section('content')
     <section class="container writing-dashboard">
-        <div class="writing-dashboard-top"><a class="reading-back" href="{{ route('readings.index') }}">← Lihat Ruang Baca</a><span class="writing-dashboard-label"><span></span> Studio Penulis</span></div>
+        <div class="writing-dashboard-top">
+            <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;">
+                <a class="reading-back" href="{{ route('readings.index') }}">← Lihat Ruang Baca</a>
+                <a class="reading-back" href="{{ route('dashboard.index') }}">← Dashboard Utama</a>
+            </div>
+            <span class="writing-dashboard-label"><span></span> Studio Penulis</span>
+        </div>
         <header class="writing-dashboard-head">
             <div class="reading-author writing-dashboard-author"><span class="author-monogram">{{ \Illuminate\Support\Str::upper(\Illuminate\Support\Str::substr(auth()->user()->name, 0, 1)) }}</span><div><p class="eyebrow">Ruang pribadimu</p><h1>{{ auth()->user()->name }}</h1><p>{{ auth()->user()->bio }}</p></div></div>
             <a class="button" href="{{ route('dashboard.writings.create') }}"><span aria-hidden="true">＋</span> Tulis karya baru</a>

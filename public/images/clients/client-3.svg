@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <linearGradient id="bg3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2d3748"/>
+      <stop offset="100%" stop-color="#1a202c"/>
+    </linearGradient>
+  </defs>
+  <rect width="100" height="100" rx="50" fill="url(#bg3)"/>
+  <!-- Head & Hair -->
+  <circle cx="50" cy="40" r="22" fill="#c69567"/>
+  <path d="M29 36 C29 19 71 19 71 36 C67 25 57 23 50 23 C43 23 33 25 29 36 Z" fill="#2d231e"/>
+  <!-- Suit / Formal -->
+  <path d="M22 88 C25 64 37 60 50 60 C63 60 75 64 78 88 Z" fill="#1e293b"/>
+  <polygon points="50,60 43,75 50,87 57,75" fill="#f1f5f9"/>
+  <polygon points="48,69 52,69 53,87 47,87" fill="#0284c7"/>
+</svg>

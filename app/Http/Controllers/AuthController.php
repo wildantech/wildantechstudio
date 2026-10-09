@@ -36,8 +36,8 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        if ($request->user()->is_writer) {
-            return redirect()->route('dashboard.writings.index');
+        if ($request->query('area') === 'writer' && $request->user()->is_writer) {
+            return redirect()->intended(route('dashboard.writings.index'));
         }
 
         return redirect()->intended(route('dashboard.index'));

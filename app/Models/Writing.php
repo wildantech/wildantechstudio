@@ -3,19 +3,19 @@
 namespace App\Models;
 
 use Database\Factories\WritingFactory;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+#[Fillable([
+    'user_id', 'title', 'slug', 'type', 'excerpt', 'body', 'cover_path',
+    'attachment_path', 'attachment_name', 'status', 'published_at',
+])]
 class Writing extends Model
 {
     /** @use HasFactory<WritingFactory> */
     use HasFactory;
-
-    protected $fillable = [
-        'user_id', 'title', 'slug', 'type', 'excerpt', 'body', 'cover_path',
-        'attachment_path', 'attachment_name', 'status', 'published_at',
-    ];
 
     protected function casts(): array
     {

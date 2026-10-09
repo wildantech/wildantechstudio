@@ -48,6 +48,7 @@
                         <small>JPG, PNG, atau WebP · maks. 5 MB</small>
                         @if ($writing->cover_path)
                             <img class="editor-cover-preview" src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($writing->cover_path) }}" alt="Sampul saat ini">
+                            <label class="checkbox-field"><input type="checkbox" name="remove_cover" value="1"><span>Hapus sampul ini</span></label>
                         @endif
                         @error('cover')<small class="field-error">{{ $message }}</small>@enderror
                     </div>
@@ -57,6 +58,7 @@
                         <small>PDF, DOC, DOCX, atau TXT · maks. 30 MB. Lampiran akan tersedia untuk pembaca.</small>
                         @if ($writing->attachment_name)
                             <small>Terpasang: {{ $writing->attachment_name }}</small>
+                            <label class="checkbox-field"><input type="checkbox" name="remove_attachment" value="1"><span>Hapus lampiran ini</span></label>
                         @endif
                         @error('attachment')<small class="field-error">{{ $message }}</small>@enderror
                     </div>

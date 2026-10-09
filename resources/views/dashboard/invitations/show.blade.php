@@ -6,9 +6,13 @@
     <section class="container dashboard-shell">
         <div class="dashboard-head">
             <div><p class="eyebrow">Kelola undangan</p><h1>{{ $invitation->title }}</h1><p>{{ $invitation->host_names }} · {{ $guestCount }} tamu · {{ $respondedCount }} sudah mengisi RSVP</p></div>
-            <div class="form-actions"><a class="button-quiet button-small" href="{{ route('dashboard.invitations.edit', $invitation) }}">Edit acara</a><span class="status-pill {{ $invitation->is_published ? '' : 'draft' }}">{{ $invitation->is_published ? 'Terbit' : 'Draf' }}</span></div>
+            <div class="form-actions" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                <a class="button-quiet button-small" href="{{ route('studio.invitations.preview', $invitation->theme) }}" target="_blank">Lihat Pratinjau Tema ↗</a>
+                <a class="button-quiet button-small" href="{{ route('dashboard.invitations.edit', $invitation) }}">Edit Acara</a>
+                <span class="status-pill {{ $invitation->is_published ? '' : 'draft' }}">{{ $invitation->is_published ? 'Terbit' : 'Draf' }}</span>
+            </div>
         </div>
-        <nav class="dashboard-links" aria-label="Navigasi dashboard"><a class="button-quiet button-small" href="{{ route('dashboard.index') }}">Dashboard</a>@if ($invitation->is_published)<span class="quiet">Tautan publik dibuat per tamu.</span>@endif</nav>
+        <nav class="dashboard-links" aria-label="Navigasi dashboard"><a class="button-quiet button-small" href="{{ route('dashboard.index') }}">← Kembali ke Dashboard</a>@if ($invitation->is_published)<span class="quiet" style="font-size:11px;margin-left:8px;">Tautan publik dibuat otomatis per tamu personal di bawah.</span>@endif</nav>
         @if ($invitation->is_published && $invitation->expires_at)<p class="retention-note">Undangan ini dijadwalkan dihapus permanen pada <strong>{{ $invitation->expires_at->translatedFormat('d F Y, H:i') }}</strong>, termasuk daftar tamu, RSVP, ucapan, dan foto.</p>@endif
 
         <div class="stat-row">
@@ -49,7 +53,12 @@
                                         </form>
                                     </td>
                                     <td>@if ($guest->rsvp_status === 'attending')Hadir · {{ $guest->party_size }}@elseif ($guest->rsvp_status === 'declined')Tidak hadir@else<span class="quiet">Menunggu</span>@endif</td>
-                                    <td><a class="button-quiet button-small" href="{{ $guest->whatsappUrl() }}" target="_blank" rel="noopener noreferrer">Buka WhatsApp</a></td>
+                                    <td>
+                                        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+                                            <a class="button-quiet button-small" href="{{ $guest->whatsappUrl() }}" target="_blank" rel="noopener noreferrer">Buka WhatsApp</a>
+                                            <button type="button" class="button-quiet button-small" data-copy-link="{{ route('invitations.public.show', [$invitation->slug, $guest->token]) }}" title="Salin tautan personal">Salin Tautan</button>
+                                        </div>
+                                    </td>
                                     <td>@if ($guest->marked_sent_at){{ $guest->marked_sent_at->format('d M Y H:i') }}@else<span class="quiet">Belum ditandai</span>@endif</td>
                                     <td><div class="guest-actions">
                                         @if (! $guest->marked_sent_at)
@@ -71,7 +80,16 @@
             @forelse ($wishes as $wish)
                 <article class="wish-item">
                     <div><strong>{{ $wish->guest->name }}</strong><p>{{ $wish->message }}</p><small class="quiet">{{ $wish->created_at->format('d M Y H:i') }} · {{ $wish->is_approved ? 'Tampil' : 'Menunggu persetujuan' }}</small></div>
-                    @unless ($wish->is_approved)<form method="POST" action="{{ route('dashboard.wishes.approve', [$invitation, $wish->id]) }}">@csrf<button class="button-quiet button-small" type="submit">Setujui</button></form>@endunless
+                    <div style="display:flex;gap:6px;align-items:center;">
+                        @unless ($wish->is_approved)
+                            <form method="POST" action="{{ route('dashboard.wishes.approve', [$invitation, $wish->id]) }}">@csrf<button class="button-quiet button-small" type="submit">Setujui</button></form>
+                        @endunless
+                        <form method="POST" action="{{ route('dashboard.wishes.destroy', [$invitation, $wish->id]) }}" onsubmit="return confirm('Hapus ucapan ini?')">
+                            @csrf
+                            @method('DELETE')
+                            <button class="button-danger button-small" type="submit">Hapus</button>
+                        </form>
+                    </div>
                 </article>
             @empty
                 <div class="empty-state">Belum ada ucapan.</div>
@@ -81,3 +99,21 @@
         <div class="form-actions"><form method="POST" action="{{ route('dashboard.invitations.destroy', $invitation) }}" onsubmit="return confirm('Hapus undangan beserta daftar tamu dan RSVP-nya?')">@csrf @method('DELETE')<button class="button-danger button-small" type="submit">Hapus undangan</button></form></div>
     </section>
 @endsection
+
+@push('scripts')
+<script>
+document.querySelectorAll('[data-copy-link]').forEach(button => {
+    button.addEventListener('click', async () => {
+        const link = button.dataset.copyLink;
+        try {
+            await navigator.clipboard.writeText(link);
+            const originalText = button.textContent;
+            button.textContent = '✓ Tersalin';
+            setTimeout(() => { button.textContent = originalText; }, 2000);
+        } catch {
+            prompt('Salin tautan undangan:', link);
+        }
+    });
+});
+</script>
+@endpush

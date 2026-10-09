@@ -34,7 +34,7 @@ class StoreInvitationRequest extends FormRequest
             'groom_father' => ['required', 'string', 'max:120'],
             'groom_mother' => ['required', 'string', 'max:120'],
             'groom_child_order' => ['required', 'integer', 'min:1', 'max:10'],
-            'theme' => ['required', 'in:indigo,midnight-moon,jawa,netflix,purnama,niku-story,floral,heritage,moonlight,classic'],
+            'theme' => ['required', 'in:indigo,midnight-moon,jawa,netflix,purnama,niku-story,lavender,wine,coastal,botanical,nocturne,olive,floral,heritage,moonlight,classic'],
             'cover_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'bride_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],
             'groom_photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:5120'],

@@ -6,17 +6,12 @@ use App\Models\Invitation;
 use App\Models\Project;
 use App\Models\Service;
 use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index(Request $request): View|RedirectResponse
+    public function index(Request $request): View
     {
-        if ($request->user()->is_writer) {
-            return redirect()->route('dashboard.writings.index');
-        }
-
         $invitations = Invitation::query()
             ->when(! $request->user()->is_admin, fn ($query) => $query->whereBelongsTo($request->user()))
             ->with('user:id,name,email')

@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#090909">
     <title>{{ $invitation->title }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         :root{color-scheme:dark;--nf-red:#e50914;--nf-black:#090909;--nf-panel:#181818;--nf-white:#f5f5f1;--nf-muted:#aaa}

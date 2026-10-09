@@ -1,4 +1,4 @@
-@if ($invitation->theme === 'lavender')
+@if ($invitation->theme === 'zaki-zahro')
     @include('invitations.zaki-zahro')
 @elseif ($invitation->theme === 'midnight-moon')
     @include('invitations.midnight-moon-reference')
@@ -18,6 +18,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="{{ $invitation->theme === 'lavender' ? '#000000' : '#f3eee5' }}">
     <title>{{ $invitation->title }}</title>
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/logo.png') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="invitation-page invitation-long theme-{{ $invitation->theme }}" style="--theme-stage: {{ $invitation->theme === 'lavender' ? 'none' : "url('".asset('images/aset/'.str_replace(' ', '%20', match ($invitation->theme) { 'indigo' => 'dekorasi gapura1.png', 'wine' => 'dekorasi gapura2.png', 'coastal' => 'dekor belakang gapura 3.png', default => 'dekorasi bunga tinggi.png' }))."')" }}">
@@ -49,6 +52,7 @@
     <section class="invitation-cover" id="invitation-cover" style="--hero-image: {{ $invitation->theme === 'lavender' ? 'none' : ($invitation->cover_image ? "url('".\Illuminate\Support\Facades\Storage::disk('public')->url($invitation->cover_image)."')" : 'var(--theme-stage)') }}">
             @if ($invitation->theme === 'lavender')
                 <div class="night-sky" aria-hidden="true">
+                    <span class="night-moon"></span>
                     <span class="night-window-stripes"></span>
                 </div>
                 <img class="night-flower night-flower-cover-left" src="{{ asset('images/aset/bunga-malam.svg') }}" alt="" aria-hidden="true">
@@ -71,7 +75,7 @@
             </div>
     </section>
 
-    <main class="invite-card invite-long-card" id="invite-content" style="--invite-ornament: {{ $invitation->theme === 'lavender' ? 'none' : "url('".$artUrl($artwork['ornament'])."')" }}" hidden>
+    <main class="invite-card invite-long-card" id="invite-content" style="--invite-ornament: url('{{ $artUrl($artwork['ornament']) }}')" hidden>
         <header class="long-hero" style="--hero-image: {{ $invitation->theme === 'lavender' ? 'none' : ($invitation->cover_image ? "url('".\Illuminate\Support\Facades\Storage::disk('public')->url($invitation->cover_image)."')" : 'var(--theme-stage)') }}">
             <div class="hero-wash"></div><div class="hero-copy"><p class="invite-kicker">The Wedding Of</p><h1 tabindex="-1">{{ $invitation->bride_name }} <span>&amp;</span> {{ $invitation->groom_name }}</h1>@if ($firstEvent)<p class="hero-date">{{ $firstEvent->starts_at->translatedFormat('l, d F Y') }}</p>@endif</div>
         </header>
@@ -96,22 +100,18 @@
                 <small>QS. Ar-Rum: 21</small>
             </section>
 
-            <section class="couple-section" id="pasangan" data-reveal style="--couple-flower: {{ $invitation->theme === 'lavender' ? 'none' : "url('".$artUrl($artwork['ornament'])."')" }}; --couple-foliage: {{ $invitation->theme === 'lavender' ? 'none' : "url('".$artUrl($artwork['foliage'])."')" }}">
+            <section class="couple-section" id="pasangan" data-reveal style="--couple-flower: url('{{ $artUrl($artwork['ornament']) }}'); --couple-foliage: url('{{ $artUrl($artwork['foliage']) }}');">
                 <p class="invite-kicker">Dengan memohon rahmat Allah</p>
                 <h2>Merayakan sebuah janji</h2>
                 <div class="couple-grid">
                     <article class="person-card person-bride">
-                        @if ($invitation->theme !== 'lavender')
-                            @if ($invitation->bride_photo)<img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($invitation->bride_photo) }}" alt="{{ $invitation->bride_name }}">@else<img src="{{ $artUrl($artwork['bride']) }}" alt="Ilustrasi pengantin putri">@endif
-                        @endif
+                        @if ($invitation->bride_photo)<img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($invitation->bride_photo) }}" alt="{{ $invitation->bride_name }}">@else<img src="{{ $artUrl($artwork['bride']) }}" alt="Ilustrasi pengantin putri">@endif
                         <h3>{{ $invitation->bride_name }}</h3>
                         <p>Putri {{ $childOrderWords[$invitation->bride_child_order] ?? '' }} dari<br />Bapak {{ $invitation->bride_father }}<br />&amp; Ibu {{ $invitation->bride_mother }}</p>
                     </article>
                     <span class="couple-and" aria-hidden="true">&amp;</span>
                     <article class="person-card person-groom">
-                        @if ($invitation->theme !== 'lavender')
-                            @if ($invitation->groom_photo)<img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($invitation->groom_photo) }}" alt="{{ $invitation->groom_name }}">@else<img src="{{ $artUrl($artwork['groom']) }}" alt="Ilustrasi pengantin putra">@endif
-                        @endif
+                        @if ($invitation->groom_photo)<img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($invitation->groom_photo) }}" alt="{{ $invitation->groom_name }}">@else<img src="{{ $artUrl($artwork['groom']) }}" alt="Ilustrasi pengantin putra">@endif
                         <h3>{{ $invitation->groom_name }}</h3>
                         <p>Putra {{ $childOrderWords[$invitation->groom_child_order] ?? '' }} dari<br />Bapak {{ $invitation->groom_father }}<br />&amp; Ibu {{ $invitation->groom_mother }}</p>
                     </article>

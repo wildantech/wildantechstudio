@@ -372,4 +372,28 @@ class StudioAndInvitationFlowTest extends TestCase
         $response->assertRedirect(route('dashboard.admin.services.index'));
         $this->assertDatabaseHas('services', ['slug' => 'prototipe-sensor', 'is_active' => true]);
     }
+
+    public function test_invitations_catalog_displays_the_five_featured_themes(): void
+    {
+        $response = $this->get(route('studio.invitations'));
+
+        $response->assertOk()
+            ->assertSee('Niku Story')
+            ->assertSee('Midnight Moon')
+            ->assertSee('Jawa Heritage')
+            ->assertSee('Netflix Style')
+            ->assertSee('Indigo Night');
+    }
+
+    public function test_theme_preview_routes_render_for_all_five_themes(): void
+    {
+        $themes = ['niku-story', 'midnight-moon', 'jawa', 'netflix', 'indigo'];
+
+        foreach ($themes as $theme) {
+            $response = $this->get(route('studio.invitations.preview', $theme));
+            $response->assertOk()
+                ->assertSee('Alya')
+                ->assertSee('Raka');
+        }
+    }
 }

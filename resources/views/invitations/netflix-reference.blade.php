@@ -5,6 +5,9 @@
 <html lang="id">
 <head>
 	<meta charset="UTF-8">
+	<link rel="icon" type="image/png" href="/favicon.png">
+	<link rel="shortcut icon" href="/favicon.ico">
+	<link rel="apple-touch-icon" href="/images/logo.png">
 		<meta name='robots' content='noindex, follow' />
 
 	<!-- This site is optimized with the Yoast SEO plugin v28.5 - https://yoast.com/product/yoast-seo-wordpress/ -->

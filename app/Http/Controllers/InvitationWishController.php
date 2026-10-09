@@ -30,4 +30,12 @@ class InvitationWishController extends Controller
 
         return back()->with('status', 'Ucapan ditampilkan pada halaman undangan.');
     }
+
+    public function destroy(Invitation $invitation, int $wish): RedirectResponse
+    {
+        $this->authorize('update', $invitation);
+        $invitation->wishes()->findOrFail($wish)->delete();
+
+        return back()->with('status', 'Ucapan berhasil dihapus.');
+    }
 }

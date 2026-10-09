@@ -10,16 +10,26 @@
             @csrf
             @if ($invitation) @method('PUT') @endif
             @php
-                $legacyThemes = ['botanical', 'wine', 'coastal', 'lavender', 'nocturne', 'olive', 'floral', 'heritage', 'moonlight', 'classic'];
-                $selectedTheme = old('theme', in_array($invitation?->theme, $legacyThemes, true) ? 'niku-story' : ($invitation?->theme ?? 'niku-story'));
+                $selectedTheme = old('theme', $invitation?->theme ?? request()->query('theme', 'niku-story'));
                 $childOrderOptions = [1 => 'Pertama', 2 => 'Kedua', 3 => 'Ketiga', 4 => 'Keempat', 5 => 'Kelima', 6 => 'Keenam', 7 => 'Ketujuh', 8 => 'Kedelapan', 9 => 'Kesembilan', 10 => 'Kesepuluh'];
+                $themeOptions = [
+                    'niku-story' => 'Niku Story · Floral Editorial & Minimalis',
+                    'midnight-moon' => 'Midnight Moon · Starry Night & Bulan 3D',
+                    'jawa' => 'Jawa Heritage · Wayang, Gunungan & Gamelan',
+                    'netflix' => 'Netflix · Cinematic Streaming Style',
+                    'indigo' => 'Indigo · Deep Velvet Floral & Elegant',
+                    'purnama' => 'Purnama · Klasik Floral Tradisional',
+                    'lavender' => 'Nocturne · lavender malam',
+                    'wine' => 'Velvet · burgundy',
+                    'coastal' => 'Coastal · Biru Pesisir',
+                ];
             @endphp
 
             <div class="form-section"><p class="eyebrow">01 · Cerita pasangan</p><h2>Siapa yang berbahagia?</h2></div>
             <div class="form-grid">
                 <div class="field"><label for="title">Nama undangan</label><input id="title" name="title" value="{{ old('title', $invitation?->title) }}" maxlength="120" placeholder="Pernikahan Alya & Raka" required></div>
                 <div class="field"><label for="theme">Tema visual</label><select id="theme" name="theme" required>
-                    @foreach (['indigo' => 'Indigo · ilustrasi floral', 'midnight-moon' => 'Midnight Moon · jendela malam', 'jawa' => 'Jawa Heritage · wayang & gunungan', 'netflix' => 'Netflix · cinematic red & black', 'purnama' => 'Purnama · klasik floral', 'niku-story' => 'Niku Story · floral editorial'] as $value => $label)
+                    @foreach ($themeOptions as $value => $label)
                         <option value="{{ $value }}" @selected($selectedTheme === $value)>{{ $label }}</option>
                     @endforeach
                 </select></div>

@@ -148,7 +148,9 @@ class WritingController extends Controller
 
         $existingWriting = $request->route('writing');
 
-        if (blank($data['body'] ?? null) && ! $request->hasFile('attachment') && ! ($existingWriting instanceof Writing && $existingWriting->attachment_path)) {
+        $hasExistingAttachment = $existingWriting instanceof Writing && $existingWriting->attachment_path && ! $request->boolean('remove_attachment');
+
+        if (blank($data['body'] ?? null) && ! $request->hasFile('attachment') && ! $hasExistingAttachment) {
             throw ValidationException::withMessages(['body' => 'Isi karya atau lampirkan naskah sebelum menyimpan.']);
         }
 
@@ -185,12 +187,23 @@ class WritingController extends Controller
 
     private function storeUploads(Request $request, Writing $writing): void
     {
+        if ($request->boolean('remove_cover') && $writing->cover_path) {
+            Storage::disk('public')->delete($writing->cover_path);
+            $writing->cover_path = null;
+        }
+
         if ($request->hasFile('cover')) {
             if ($writing->cover_path) {
                 Storage::disk('public')->delete($writing->cover_path);
             }
 
             $writing->cover_path = $request->file('cover')->store('writings/covers', 'public');
+        }
+
+        if ($request->boolean('remove_attachment') && $writing->attachment_path) {
+            Storage::disk('public')->delete($writing->attachment_path);
+            $writing->attachment_path = null;
+            $writing->attachment_name = null;
         }
 
         if ($request->hasFile('attachment')) {

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [StudioController::class, 'index'])->name('home');
 Route::get('/undangan-digital', [StudioController::class, 'invitations'])->name('studio.invitations');
+Route::get('/undangan-digital/preview/{theme}', [StudioController::class, 'previewTheme'])->name('studio.invitations.preview');
 Route::get('/karya/{project:slug}', [StudioController::class, 'project'])->name('projects.show');
 Route::get('/ruang-baca', [WritingController::class, 'index'])->name('readings.index');
 Route::get('/ruang-baca/daftar-penulis', [WritingAuthorController::class, 'create'])->name('writers.register');
@@ -48,6 +49,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::delete('/invitations/{invitation}/guests/{guest}', [InvitationGuestController::class, 'destroy'])->name('guests.destroy');
     Route::post('/invitations/{invitation}/guests/{guest}/tandai-terkirim', [InvitationGuestController::class, 'markSent'])->name('guests.mark-sent');
     Route::post('/invitations/{invitation}/wishes/{wish}/approve', [InvitationWishController::class, 'approve'])->name('wishes.approve');
+    Route::delete('/invitations/{invitation}/wishes/{wish}', [InvitationWishController::class, 'destroy'])->name('wishes.destroy');
 
     Route::middleware('admin')->prefix('studio')->name('admin.')->group(function (): void {
         Route::resource('projects', AdminProjectController::class);
